@@ -33,6 +33,26 @@ export default function Form() {
         });
     };
 
+    const deletePost = async (index: number) => {
+        try {
+          // DELETEリクエストを送信
+          const response = await fetch(`/api/posts?id=${index}`, {
+            method: 'DELETE',
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // 削除が成功した場合の処理
+            console.log('削除に成功しました！');
+          } else {
+            // 削除が失敗した場合の処理
+            console.error(response.statusText, data.message);
+          }
+        } catch (error) {
+          // エラーハンドリング
+          console.error(error);
+        }
+      }
+
     return (
         <div className="">
             <div className="">
@@ -46,7 +66,7 @@ export default function Form() {
                     <button className="" type="submit">追加する</button>
                 </form>
             </div>
-            <CompleteList textList={textList} onDelete={handleDelete}/>
+            <CompleteList textList={textList} onDelete={deletePost}/>
         </div>
     );
 }
