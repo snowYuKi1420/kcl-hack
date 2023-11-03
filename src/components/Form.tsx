@@ -33,7 +33,37 @@ export default function Form() {
         });
     };
 
-    const deletePost = async (index: number) => {
+    const submitTask = async () => {
+        // 入力が空の場合は知らせる
+        if (todoText === '') {
+          alert('テキストが空です')
+          return
+        }
+        try {
+          // POSTリクエストを送信
+          const response = await fetch('/api/sample/posts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ todoText }),
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // POSTが成功した場合の処理
+            setTodoText('')
+            console.log('投稿に成功しました！')
+          } else {
+            // POSTが失敗した場合の処理
+            console.error(response.statusText, data.message);
+          }
+        } catch (error) {
+          // エラーハンドリング
+          console.error(error);
+        }
+      }
+
+    const deleteTask = async (index: number) => {
         try {
           // DELETEリクエストを送信
           const response = await fetch(`/api/posts?id=${index}`, {
@@ -66,7 +96,7 @@ export default function Form() {
                     <button className="" type="submit">追加する</button>
                 </form>
             </div>
-            <CompleteList textList={textList} onDelete={deletePost}/>
+            <CompleteList textList={textList} onDelete={deleteTask}/>
         </div>
     );
 }
