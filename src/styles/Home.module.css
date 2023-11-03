@@ -1,0 +1,7 @@
+.title {
+    min-height: screen;
+    background: gray 100;
+    background-position-y: 10;
+    background-position-x: 4;
+    shape-margin: 6;
+}
