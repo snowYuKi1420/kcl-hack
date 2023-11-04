@@ -26,6 +26,38 @@ export default function CompleteList({ textList, onDelete }: CompleteListProps) 
         }
     };
 
+    const updateTask = async () => {
+        if (editedTask === '') {
+            alert('テキストが空です')
+            return
+        }
+        try {
+            // PUTリクエストを送信
+            const response = await fetch('/api/sample/posts', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id: editIndex,
+                content: editedTask,
+              }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+              // POSTが成功した場合の処理
+              setEditIndex(-1);
+              console.log('更新に成功しました！')
+            } else {
+              // POSTが失敗した場合の処理
+              console.error(response.statusText, data.message)
+            }
+          } catch (error) {
+            // エラーハンドリング
+            console.error(error);
+          }
+    }
+
     return (
         <ul className="">
             {textList.map((todo: Todo, index: number) => (
@@ -37,7 +69,7 @@ export default function CompleteList({ textList, onDelete }: CompleteListProps) 
                             value={editedTask}
                             onChange={(e) => setEditedTask(e.target.value)}
                             />
-                            <button onClick={finishEdit}>完了</button>
+                            <button onClick={updateTask}>完了</button>
                         </div>
                     ) : (
                         <div>
